@@ -1,7 +1,6 @@
 ---
 title: {{ title }}
 date: {{ date }}
-categories: 
-tags: 
-toc: true
+description: 
+header-img: "img/home-bg.jpg"
 ---

@@ -1,0 +1,68 @@
+# Nav
+menu:
+  主页: /
+  分类: /categories
+  归档: /archives
+  关于: /about
+  #随笔: /tags/随笔
+
+# SubNav
+subnav:
+  github: "http://github.com/voidking"
+  weibo: "http://weibo.com/378920304"
+  rss: "/atom.xml"
+  #zhihu: "#"
+  #douban: "#"
+  #mail: "#"
+  #facebook: "#"
+  #google: "#"
+  #twitter: "#"
+  #linkedin: "#"
+
+# 网站图标
+favicon: /favicon.png
+
+# 头像
+avatar: "/img/headportrait.jpg"
+
+# Content
+excerpt_link: more
+fancybox: true
+tagcloud: true
+
+# 分享
+share: true
+
+# gitalk
+gitalk: 
+  enable: false
+  client_id: 5a238b8c32b1e4dd2156
+  client_secret: bfb5d518626f6fdc7da0351d1e0cd37ab75c6361
+  repo: voidking.github.io
+  owner: voidking
+  admin: voidking
+
+# livere
+livere: 
+  enable: true
+  uid: MTAyMC8zODU3Mi8xNTEwMA==
+
+# 百度统计
+baidustatistic:
+  enable: true
+  siteid: b759ac2a7fa45129e3ef060bf68259f0
+
+
+#关闭友链
+#friends: false
+#开启友链
+friends:
+  VoidKing: http://www.voidking.com
+  简书: http://www.jianshu.com/u/9f179465dd2b
+  SegmentFault: https://segmentfault.com/blog/voidking
+  博客园: http://www.cnblogs.com/voidking
+  CSDN: http://blog.csdn.net/c0416
+  Alliot's Blog: http://www.iots.vip
+
+#开启关于我
+aboutme: 虽然还没想好怎么夸自己，但总觉得这里放点东西比较和谐。。。

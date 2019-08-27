@@ -1,7 +1,8 @@
 ---
 title: {{ title }}
+subtitle:
 date: {{ date }}
-categories: 
-tags: 
-toc: true
+catalog: true
+header-img:
+tags:
 ---
