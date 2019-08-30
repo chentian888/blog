@@ -6,9 +6,9 @@
 title: 学习笔记
 subtitle:
 description:
-keywords: 笔记,前端,前端学习,vue,react,node,php,前端学习笔记,资料
+keywords: 笔记,前端,前端学习,前端学习笔记,前端资料,vue,react,node,php
 author: 陈湉
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
@@ -54,9 +54,9 @@ index_generator:
   order_by: -date
   
 # Category & Tag
-default_category: 首页
-category_map: 前端,后端,工具
-tag_map: react,vue,node,js,php,linux,miniprogram
+default_category: 
+category_map: 
+tag_map: 
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -73,7 +73,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: hexo-theme-snippet
+theme: hexo-theme-next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

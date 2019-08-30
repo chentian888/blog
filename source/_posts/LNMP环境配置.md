@@ -1,7 +1,7 @@
 ---
-title: Linux软件安装
+title: LNMP环境配置
 toc: true
-date: 2019-08-27 21:25:10
+date: {{date}}
 categories: 运维
 tags: linux
 ---
@@ -226,4 +226,4 @@ Please report any problems with the /usr/bin/mysqlbug script!
 
 
 
-## LNMP环境搭建源码版
+# LNMP环境搭建源码版
