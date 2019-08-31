@@ -1,7 +1,7 @@
 ---
 title: LNMP环境配置
 toc: true
-date: {{date}}
+date: 2019-08-29 17:27:27
 categories: 运维
 tags: linux
 ---
