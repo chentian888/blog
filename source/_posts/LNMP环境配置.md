@@ -6,12 +6,12 @@ categories: 运维
 tags: linux
 ---
 
-# 所有安装均在centos6操作系统下进行
-
 # LNMP环境搭建Yum版
+## 环境
+* `centos6`
 
 ## 一、挂载cd光盘
-```
+```js
 mount -o loop -t iso9660 CentOS-6.10-x86_64-bin-DVD1.iso /media/cdrom1
 mount -o loop -t iso9660 CentOS-6.10-x86_64-bin-DVD2.iso /media/cdrom2
 ```
@@ -20,7 +20,7 @@ mount -o loop -t iso9660 CentOS-6.10-x86_64-bin-DVD2.iso /media/cdrom2
 1. `cd /etc/yum.repos.d/`
 2. `mv CentOS-Base.repo CentOS-Base.repo.bak`
 3. `vi CentOS-Medis.repo`，将内容修改为如下
-```
+```js
 [c7-media]
 name=CentOS-$releasever - Media
 baseurl=file:///media/cdrom1/
@@ -48,7 +48,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 1. 进入到yum源根目录`/etc/yum.repos.d`
 2. 创建`nginx yum`源文件`touch nginx.repo`
 3. 按照官方说明编辑文件内容
-```
+```js
 [nginx-stable]
 name=nginx stable repo
 baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
@@ -65,7 +65,7 @@ gpgkey=https://nginx.org/keys/nginx_signing.key
 ```
 
 4. 检测nginx源是否配置成功`yum search nginx`
-```
+```js
 已加载插件：fastestmirror
 Loading mirror speeds from cached hostfile
  * c6-media: 
@@ -104,7 +104,7 @@ nginx: /usr/sbin/nginx /etc/nginx /usr/lib64/nginx /usr/share/nginx /usr/share/m
 4. 启动`nginx`进入官网查看`Beginner’s Guide` 启动使用文档`nginx`
 
 5. `ps -aux | grep nginx`看到如下信息则`nginx`启动成功
-```
+```js
 root      1946  0.0  0.1  47348  1084 ?        Ss   04:14   0:00 nginx: master process nginx
 nginx     1947  0.0  0.1  47756  1816 ?        S    04:14   0:00 nginx: worker process
 root      1949  0.0  0.0 103332   904 pts/1    S+   04:14   0:00 grep nginx
@@ -132,7 +132,7 @@ root      1949  0.0  0.0 103332   904 pts/1    S+   04:14   0:00 grep nginx
 1. 安装`php-fpm` `yum -y install php-fpm`
 2. 启动`fpm` `service php-fpm start`
 3. `vi /etc/nginx/conf.d/default.conf`，解开如下注释
-```
+```js
 # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
 #
 location ~ \.php$ {
@@ -160,7 +160,7 @@ location ~ \.php$ {
 ## 七、安装/启动mysql
 1. `yum -y install mysql-server mysql`
 2. 启动 `service mysqld start`，出现如下提示表示启动成功
-```
+```js
 初始化 MySQL 数据库： Installing MySQL system tables...
 OK
 Filling help tables...
@@ -200,7 +200,7 @@ Please report any problems with the /usr/bin/mysqlbug script!
 4. 重启`mysql` `service mysqld restart`
 5. 连接 `mysql -u root -p`
 6. 在`nginx root`目录下增加测试文件 `vi db.php`
-```
+```php
 <?php
     $link=mysql_connect('localhost','root','123456');
     if($link) echo 'FAILD';
@@ -227,3 +227,259 @@ Please report any problems with the /usr/bin/mysqlbug script!
 
 
 # LNMP环境搭建源码版
+## 环境及版本
+
+* centos6 
+* nginx1.14 
+* php5.5.6 
+* mysql-5.6.45 
+* pcre-8.41
+* zlib-1.2.11
+
+## 源码包获取
+1. 获取php
+`https://www.php.net/`->`downloads`->`Old archives`->`PHP Museum`
+
+2. 获取nginx
+`http://nginx.org`->`download`->`Stable version`
+
+3. 获取mysql
+mysql使用编译版不适用源码版
+`https://www.mysql.com/`->`download`->`MySQL Community (GPL) Downloads`->`MySQL Community Server`->`Linux Generic`
+
+## 编译环境安装
+```js
+yum -y install gcc gcc-c++
+```
+
+## 源码安装Nginx
+### 依赖包安装
+1. 依赖`yum -y install openssl openssl-devel`
+2. `pcre-8.41`进入官网或从`nginx`安装配置说明中的`--with-pcre=path`参数找到官网入口
+`http://www.pcre.org/->https://sourceforge.net/projects/pcre/files/->pcre->8.41`
+3. `zlib-1.2.11`进入官网或从`nginx`安装配置说明中的`--with-zlib=path`参数找到官网入口
+`http://zlib.net/->zlib source code, version 1.2.11, tar.gz format`
+
+### 配置、编译、安装
+1. 配置
+配置信息在官网中 `documentation`->`Building nginx from Sources`栏目下
+```js
+./configure
+    --sbin-path=/usr/local/nginx/nginx
+    --conf-path=/usr/local/nginx/nginx.conf
+    --pid-path=/usr/local/nginx/nginx.pid
+    --with-http_ssl_module
+    --with-pcre=../pcre-8.41
+    --with-zlib=../zlib-1.2.11
+```
+执行上述配置命令后会出现错误提示，提示缺少`OpenSSL`库
+```js
+./configure: error: SSL modules require the OpenSSL library.
+You can either do not enable the modules, or install the OpenSSL library
+into the system, or build the OpenSSL library statically from the source
+with nginx by using --with-openssl=<path> option.
+```
+使用`yum`安装`yum  -y install openssl openssl-devel`
+并指定`pcre`和`zlib`库路径`../pcre-8.41`、`../zlib-1.2.11`
+
+2. 编译&&安装
+`make&&make install`
+
+### 效果测试
+1. 启动ng `/usr/local/nginx/nginx`
+2. 新建测试文件`vim /usr/local/nginx/html/index.php`
+3. 本机访问虚拟机ip`192.168.0.108/index.php`
+
+## 源码安装PHP
+
+### 依赖包安装
+1. `yum -y install libxml2-devle`
+
+### 配置、编译、安装
+配置按照官网步骤进行
+`Documentation->Chinese (Simplified)->Unix 系统下的安装->Unix 系统下的 Nginx 1.4.x`
+
+1. 获取并解压 PHP 源代码
+```js
+tar zxf php-x.x.x
+```
+
+2. 配置并构建 PHP。在此步骤您可以使用很多选项自定义 PHP，例如启用某些扩展等。 运行 ./configure --help 命令来获得完整的可用选项清单。 在本示例中，我们仅进行包含 PHP-FPM 和 MySQL 支持的简单配置
+
+```js
+cd ../php-x.x.x
+./configure --enable-fpm --with-mysqli --with-pdo-mysql
+make
+sudo make install
+```
+看到`Thank you for using PHP`.则表示配置成功
+
+3. 创建配置文件，并将其复制到正确的位置。
+```js
+cp php.ini-development /usr/local/php/php.ini
+cp /usr/local/etc/php-fpm.d/www.conf.default /usr/local/etc/php-fpm.d/www.conf
+cp sapi/fpm/php-fpm /usr/local/bin
+```
+其中第二条在当前环境下需要改成
+```js
+cp /usr/local/etc/php-fpm.conf.default /usr/local/etc/php-fpm.conf
+```
+
+4. 需要着重提醒的是，如果文件不存在，则阻止 `Nginx` 将请求发送到后端的 `PHP-FPM` 模块， 以避免遭受恶意脚本注入的攻击。将`php.ini`文件中的配置项`cgi.fix_pathinfo`设置为`0`
+```js
+vim /usr/local/php/php.ini
+cgi.fix_pathinfo=0
+```
+
+5. 在启动服务之前，需要修改 php-fpm.conf 配置文件，确保 php-fpm 模块使用 www-data 用户和 www-data 用户组的身份运行。
+```js
+vim /usr/local/etc/php-fpm.conf
+```
+找到以下内容并修改：
+```js
+; Unix user/group of processes
+; Note: The user is mandatory. If the group is not set, the default user's group
+;       will be used.
+user = www-data
+group = www-data
+```
+然后启动 php-fpm 服务：
+```js
+/usr/local/bin/php-fpm
+```
+
+6. 配置 Nginx 使其支持 PHP 应用
+```js
+vim /usr/local/nginx/conf/nginx.conf
+```
+修改默认的 `location` 块，使其支持 `.php` 文件：
+```js
+location / {
+    root   html;
+    index  index.php index.html index.htm;
+}
+```
+下一步配置来保证对于 `.php` 文件的请求将被传送到后端的 `PHP-FPM` 模块， 取消默认的 `PHP` 配置块的注释，并修改为下面的内容：
+```js
+location ~* \.php$ {
+    fastcgi_index   index.php;
+    fastcgi_pass    127.0.0.1:9000;
+    include         fastcgi_params;
+    fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+    fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
+}
+```
+
+7. 重启 `Nginx`
+```js
+sudo /usr/local/nginx/sbin/nginx -s stop
+sudo /usr/local/nginx/sbin/nginx
+```
+
+## 源码安装MySQL
+### 依赖包安装
+### 配置、安装
+到mysql官网查看安装步骤
+`https://www.mysql.com/->DOCUMENTATION->MySQL Server->MySQL 5.6 Reference Manual->Installing and Upgrading MySQL->Installing MySQL on Unix/Linux Using Generic Binaries`
+
+找到如下语句，即安装步骤
+`To install and use a MySQL binary distribution, the command sequence looks like this:`
+
+```js
+shell> groupadd mysql
+shell> useradd -r -g mysql -s /bin/false mysql
+shell> cd /usr/local
+shell> tar zxvf /path/to/mysql-VERSION-OS.tar.gz
+shell> ln -s full-path-to-mysql-VERSION-OS mysql
+shell> cd mysql
+shell> scripts/mysql_install_db --user=mysql
+shell> bin/mysqld_safe --user=mysql &
+# Next command is optional
+shell> cp support-files/mysql.server /etc/init.d/mysql.server
+```
+
+调整下命令执行顺序，按照如下步骤执行命令
+```js
+1. cp /root/mysql /opt/mysql
+2. cd /opt/mysql
+3. groupadd mysql
+4. useradd -r -g mysql -s /bin/false mysql
+5. cd /usr/local
+6. ln -s /opt/mysql mysql
+7. cd /usr/local/mysql
+8. scripts/mysql_install_db --user=mysql
+```
+执行第8步成功后会提示如下命令。需要按照命令修改密码
+
+```js
+To start mysqld at boot time you have to copy
+support-files/mysql.server to the right place for your system
+
+PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+To do so, start the server, then issue the following commands:
+
+  ./bin/mysqladmin -u root password 'new-password'
+  ./bin/mysqladmin -u root -h localhost.localdomain password 'new-password'
+
+Alternatively you can run:
+
+  ./bin/mysql_secure_installation
+```
+
+修改密码
+```js
+./bin/mysqladmin -u root password 'new-password'
+```
+
+## 测试
+
+命令行连接数据库
+```js
+mysql -u root -p
+```
+提示
+```js
+-bash: mysql: command not found
+```
+
+应为我们只通过源码安装了服务端并没有安装客户端，通过`yum`安装客户端`yum -y install mysql`
+
+再次尝试用命令连接数据库
+
+```js
+mysql -u root -p
+```
+`mysql.sock`文件报错
+
+```js
+ERROR 2002 (HY000):Cant connect to local MySQL server through socket '/var/lib/mysql/mysql.sock'(2)
+```
+
+查找mysql.sock文件 
+```js
+find / -name mysql.sock
+```
+
+得到结果
+```js
+/tmp/mysql.sock
+```
+
+
+将`/usr/local/mysql`文件夹中的`my.cnf`(执行安装命令后才会生成)配置文件复制到`/etc`目录下
+```js
+cp /usr/local/mysql /etc/
+```
+
+编辑配置文件，并新增新节点
+```js
+vim /etc/my.cnf
+```
+
+```js
+[client]
+socket=/tmp/mysql.sock
+```
+
+### 数据库服务管理
+
