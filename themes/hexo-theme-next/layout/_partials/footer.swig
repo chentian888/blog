@@ -1,4 +1,6 @@
-<div class="copyright">{#
+<div class="copyright">
+  <a href="https://beian.miit.gov.cn" target="_blank">鄂ICP备2021006164号-1</a>
+{#
 #}{% set current = date(Date.now(), "YYYY") %}{#
 #}&copy; {% if theme.footer.since and theme.footer.since != current %}{{ theme.footer.since }} &mdash; {% endif %}{#
 #}<span itemprop="copyrightYear">{{ current }}</span>
