@@ -78,14 +78,14 @@ theme: hexo-theme-next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-- type: git
-  repo: https://github.com/boywild/boywild.github.io.git
-  branch: master
+# - type: git
+#   repo: https://github.com/boywild/boywild.github.io.git
+#   branch: master
 
 - type: rsync
-  host: 
-  user: 
-  root: 
+  host: 118.195.177.46
+  user: root
+  root: /home/www/blog
   port: 22
   delete: true
   verbose: true
